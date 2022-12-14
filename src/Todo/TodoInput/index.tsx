@@ -16,7 +16,7 @@ export const TodoInput = ({ todos }: { todos: TodoStore }) => {
   return (
     <>
       <input value={newTodo} onChange={handleInputChange} />
-      <button onClick={handleButtonClick}></button>
+      <button onClick={handleButtonClick}>Add Todo</button>
     </>
   );
 };
