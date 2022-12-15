@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import TodoStore from "../../stores/TodoStore";
 import styles from "./TodoInput.module.css";
 
@@ -9,15 +9,16 @@ export const TodoInput = ({ todos }: { todos: TodoStore }) => {
     setNewTodo(event.target.value);
   };
 
-  const handleButtonClick = () => {
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
     todos.add(newTodo);
     setNewTodo("");
   };
 
   return (
-    <div className={styles["todo-input-group"]}>
+    <form className={styles["todo-input-group"]} onSubmit={handleSubmit}>
       <input value={newTodo} onChange={handleInputChange} />
-      <button onClick={handleButtonClick}>Add Todo</button>
-    </div>
+      <button type="submit">Add Todo</button>
+    </form>
   );
 };
