@@ -1,4 +1,4 @@
-import { action, makeObservable, observable } from "mobx";
+import { makeAutoObservable } from "mobx";
 
 export interface Todo {
   id: number;
@@ -7,14 +7,12 @@ export interface Todo {
 }
 
 class TodoStore {
-  @observable
   list: Todo[] = [];
 
   constructor() {
-    makeObservable(this);
+    makeAutoObservable(this);
   }
 
-  @action
   add(title: string) {
     if (title.length < 3) {
       return;
@@ -27,12 +25,10 @@ class TodoStore {
     });
   }
 
-  @action
   toggle(todo: Todo) {
     todo.isDone = !todo.isDone;
   }
 
-  @action
   remove(todo: Todo) {
     this.list = this.list.filter((t) => t.id !== todo.id);
   }
