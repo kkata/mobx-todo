@@ -1,7 +1,7 @@
 import { TodoInput } from "./Todo/TodoInput";
 import { TodoList } from "./Todo/TodoList";
 import styles from "./App.module.css";
-import { action, autorun, observable, runInAction } from "mobx";
+import { action, autorun, observable, reaction, runInAction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
 import { useStore } from "./stores";
@@ -10,10 +10,15 @@ const App = () => {
   const { todos } = useStore();
 
   useEffect(() => {
-    const disposeAutorun = autorun(
+    const disposeReaction = reaction(
       () => {
-        console.log(todos.list.length);
-        throw new Error("custom error");
+        return {
+          length: todos.list.length,
+          unfinishedTodos: todos.unfinishedTodos,
+        };
+      },
+      (newValue, oldValue) => {
+        console.log({ newValue, oldValue });
       },
       {
         delay: 2000,
@@ -22,7 +27,7 @@ const App = () => {
     );
 
     return () => {
-      disposeAutorun();
+      disposeReaction();
     };
   }, []);
 
