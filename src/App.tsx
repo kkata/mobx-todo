@@ -4,18 +4,16 @@ import styles from "./App.module.css";
 import { action, autorun, observable, reaction, runInAction, when } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
-import { useStore } from "./stores";
+import store, { useStore } from "./stores";
 
-const App = () => {
-  const { todos } = useStore();
+const App = observer(({ todos }: { todos: typeof store.todos }) => {
+  // useEffect(() => {
+  //   const promiseWhen = when(() => !appUI.todoVisible);
 
-  useEffect(() => {
-    const promiseWhen = when(() => !appUI.todoVisible);
-
-    promiseWhen.then(() => {
-      console.log("clean up");
-    });
-  }, []);
+  //   promiseWhen.then(() => {
+  //     console.log("clean up");
+  //   });
+  // }, []);
 
   const appUI = useLocalObservable(() => ({
     todoVisible: true,
@@ -38,6 +36,13 @@ const App = () => {
       </div>
     </div>
   );
+});
+
+const AppWrapper = () => {
+  const { todos } = useStore();
+
+  return <App todos={todos} />;
 };
 
-export default observer(App);
+export { App };
+export default AppWrapper;
